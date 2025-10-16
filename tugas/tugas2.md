@@ -1,6 +1,7 @@
-    # Tugas
+    # Tugas 2
 
     Tampilkan end point Create Book:
 
-    ![Tampilkan endpoint Create] (ss/put.png)
+    ![Tampilkan endpoint Create] (SS/post.png)
     
+dfdfdf
