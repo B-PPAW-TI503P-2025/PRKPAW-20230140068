@@ -1,61 +1,28 @@
-const express = require('express');
-const cors = require('cors'); 
+const express = require("express");
+const cors = require("cors");
 const app = express();
 const PORT = 3001;
+const morgan = require("morgan");
 
-// 1. Import Router Buku (Mengandung logika CRUD)
-// Pastikan file 'books.js' ada di dalam folder 'routes'
-const bookRoutes = require('./routes/books'); 
+// Impor router
+const presensiRoutes = require("./routes/presensi");
+const reportRoutes = require("./routes/reports");
 
-// --- MIDDLEWARE PENTING ---
-
-// 1. CORS Middleware: Mengizinkan akses lintas-domain (untuk frontend)
+// Middleware
 app.use(cors());
-
-// 2. Body Parser Middleware: Mengubah JSON payload menjadi objek req.body (Penting untuk POST/PUT)
 app.use(express.json());
-
-// 3. Logger Middleware: Mencatat setiap permintaan masuk
+app.use(morgan("dev"));
 app.use((req, res, next) => {
-    console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
-    next(); 
+  console.log(`${new Date().toISOString()} - ${req.method} ${req.url}`);
+  next();
 });
-
-// --- DEFINISI ROUTE ---
-
-// Route Dasar: Home Page API
-app.get('/', (req, res) => {
-    res.send('Home Page for API. Access CRUD endpoints at /api/books');
+app.get("/", (req, res) => {
+  res.send("Home Page for API");
 });
-
-// 2. Pasang Router Buku (Mengaktifkan CRUD)
-// Semua rute CRUD dari books.js sekarang diakses melalui /api/books
-app.use('/api/books', bookRoutes); 
-
-// --- MIDDLEWARE ERROR HANDLING (Dipasang di akhir) ---
-
-// 1. 404 Handler: Menangani semua permintaan yang tidak cocok dengan rute di atas
-app.use((req, res, next) => {
-    // Membuat objek Error 404
-    const error = new Error('Route not found');
-    error.status = 404;
-    next(error); 
-});
-
-// 2. Global Error Handler: Middleware terakhir untuk menangani semua error yang dilempar (404, 500, dll.)
-app.use((err, req, res, next) => {
-    // Mencatat detail error untuk debugging server
-    console.error(err.stack); 
-    
-    // Mengirim respons error yang terstruktur ke klien
-    res.status(err.status || 500).json({ 
-        message: err.message || 'Internal Server Error',
-        status: err.status || 500
-    });
-});
-
-// --- START SERVER ---
-
+const ruteBuku = require("./routes/books");
+app.use("/api/books", ruteBuku);
+app.use("/api/presensi", presensiRoutes);
+app.use("/api/reports", reportRoutes);
 app.listen(PORT, () => {
-    console.log(`✅ Express server running at http://localhost:${PORT}/`);
+  console.log(`Express server running at http://localhost:${PORT}/`);
 });
