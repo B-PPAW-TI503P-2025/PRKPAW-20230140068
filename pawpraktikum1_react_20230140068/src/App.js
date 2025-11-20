@@ -1,47 +1,31 @@
-import React, { useState } from 'react';
-import './App.css';
+import React from "react";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import LoginPage from "./components/LoginPage";
+import RegisterPage from "./components/RegisterPage.js";
+import DashboardPage from "./components/DashboardPage.js";
+
 
 function App() {
-  // 1. Gunakan hook useState untuk menyimpan input nama
-  const [nama, setNama] = useState('');
-
-  // 2. Fungsi untuk menangani perubahan pada input field
-  const handleInputChange = (event) => {
-    // Memperbarui state 'nama' setiap kali input berubah
-    setNama(event.target.value);
-  };
-
   return (
-    <div className="App">
-      <header className="App-header">
-        {/* Input field untuk nama */}
-        <p>
-          Masukkan Nama Anda:
-        </p>
-        <input 
-          type="text"
-          value={nama}
-          onChange={handleInputChange}
-          placeholder="Tuliskan nama Anda di sini"
-          style={{ padding: '10px', fontSize: '16px', margin: '10px 0', width: '300px' }}
-        />
-        
-        {/* Pesan Selamat Datang */}
-        <h1>
-          {/* Tampilkan pesan: "Hello, [nama]!" */}
-          Hello, {nama || '[nama]'}!
-        </h1>
-        
-        {/* Tambahan pesan selamat datang dengan nama yang diinput */}
-        {nama && (
-          <p>
-            Pesan Selamat Datang untuk: **{nama}**
-          </p>
-        )}
-        
-      </header>
-    </div>
+    <Router>
+      <div>
+        {" "}
+        {/* Navigasi ini bisa dihapus jika tidak diperlukan */}{" "}
+        <nav className="p-4 bg-gray-100">
+          <Link to="/login" className="mr-4">
+            {" "}
+            Login{" "}
+          </Link>{" "}
+          <Link to="/register"> Register </Link>{" "}
+        </nav>{" "}
+        <Routes>
+          <Route path="/login" element={<LoginPage />} />{" "}
+          <Route path="/register" element={<RegisterPage />} />{" "}
+          <Route path="/dashboard" element={<DashboardPage />} />{" "}
+          <Route path="/" element={<LoginPage />} />{" "}
+        </Routes>{" "}
+      </div>{" "}
+    </Router>
   );
 }
-
 export default App;
